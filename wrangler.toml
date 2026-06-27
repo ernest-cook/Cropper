@@ -1,0 +1,9 @@
+name = "image-cropper"
+compatibility_date = "2026-06-26"
+compatibility_flags = ["nodejs_compat"]
+pages_build_output_dir = ".vercel/output/static"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "presets-db"
+database_id = "928247ad-485d-40e6-a69d-59c6d035a1fc"

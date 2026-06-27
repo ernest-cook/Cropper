@@ -1,0 +1,33 @@
+{
+  "name": "image-cropper",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "cf:preview": "next build && npx @cloudflare/next-on-pages",
+    "cf:deploy": "npm run cf:preview && wrangler pages deploy .vercel/output/static --commit-dirty=true",
+    "db:create": "wrangler d1 create presets-db",
+    "db:migrate:local": "wrangler d1 execute presets-db --local --file=migrations/0001_create_presets.sql",
+    "db:migrate:prod": "wrangler d1 execute presets-db --remote --file=migrations/0001_create_presets.sql"
+  },
+  "dependencies": {
+    "better-sqlite3": "^12.11.1",
+    "next": "16.2.9",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "react-image-crop": "^11.1.2"
+  },
+  "devDependencies": {
+    "@cloudflare/next-on-pages": "^1.13.16",
+    "@tailwindcss/postcss": "^4",
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "tailwindcss": "^4",
+    "typescript": "^5",
+    "wrangler": "^4.105.0"
+  }
+}
