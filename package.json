@@ -8,6 +8,7 @@
     "start": "next start",
     "cf:preview": "next build && npx @cloudflare/next-on-pages",
     "cf:deploy": "npm run cf:preview && wrangler pages deploy .vercel/output/static --commit-dirty=true",
+    "cf:pages:build": "npm install --legacy-peer-deps && npm run cf:preview",
     "db:create": "wrangler d1 create presets-db",
     "db:migrate:local": "wrangler d1 execute presets-db --local --file=migrations/0001_create_presets.sql",
     "db:migrate:prod": "wrangler d1 execute presets-db --remote --file=migrations/0001_create_presets.sql"
