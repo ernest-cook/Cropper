@@ -2,6 +2,7 @@
 
 import { useState, useCallback } from "react"
 import type { PercentCrop } from "react-image-crop"
+import LocalFileInput from "@/components/LocalFileInput"
 import UrlInput from "@/components/UrlInput"
 import ResolutionSelector from "@/components/ResolutionSelector"
 import Cropper from "@/components/Cropper"
@@ -26,8 +27,16 @@ export default function Home() {
   const [targetWidth, setTargetWidth] = useState(1920)
   const [targetHeight, setTargetHeight] = useState(1080)
 
+  const [inputMode, setInputMode] = useState<"url" | "local">("url")
+
   const handleImageLoad = useCallback((url: string) => {
     setImageSrc(url)
+    setCrop(undefined)
+    setCompletedCrop(null)
+  }, [])
+
+  const handleClear = useCallback(() => {
+    setImageSrc(null)
     setCrop(undefined)
     setCompletedCrop(null)
   }, [])
@@ -80,7 +89,45 @@ export default function Home() {
           </p>
         </div>
 
-        <UrlInput onLoad={handleImageLoad} />
+        <div className="flex justify-center gap-1 mb-4">
+          <button
+            onClick={() => setInputMode("url")}
+            className={`rounded-t-lg px-4 py-1.5 text-sm font-medium transition-colors ${
+              inputMode === "url"
+                ? "bg-blue-600 text-white"
+                : "bg-zinc-200 text-zinc-600 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-300"
+            }`}
+          >
+            URL
+          </button>
+          <button
+            onClick={() => setInputMode("local")}
+            className={`rounded-t-lg px-4 py-1.5 text-sm font-medium transition-colors ${
+              inputMode === "local"
+                ? "bg-blue-600 text-white"
+                : "bg-zinc-200 text-zinc-600 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-300"
+            }`}
+          >
+            Local File
+          </button>
+        </div>
+
+        {inputMode === "url" ? (
+          <UrlInput onLoad={handleImageLoad} />
+        ) : (
+          <LocalFileInput onLoad={handleImageLoad} />
+        )}
+
+        {imageSrc && (
+          <div className="text-center">
+            <button
+              onClick={handleClear}
+              className="text-xs text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 underline"
+            >
+              Clear image
+            </button>
+          </div>
+        )}
 
         <div className="grid grid-cols-1 lg:grid-cols-[260px_1fr] gap-6">
           <aside className="space-y-6">

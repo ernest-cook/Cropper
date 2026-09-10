@@ -16,7 +16,7 @@ export default function Cropper({ imageSrc, crop, aspect, onChange, onComplete }
     return (
       <div className="flex h-64 items-center justify-center rounded-lg border-2 border-dashed border-zinc-300 dark:border-zinc-600 bg-zinc-50 dark:bg-zinc-800/50">
         <p className="text-sm text-zinc-400 dark:text-zinc-500">
-          Enter an image URL to begin
+          Enter an image URL or select a local file to begin
         </p>
       </div>
     )
