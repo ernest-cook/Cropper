@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect, useCallback } from "react"
 
 interface Props {
   onLoad: (url: string) => void
@@ -10,18 +10,13 @@ export default function LocalFileInput({ onLoad }: Props) {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0]
-    if (!file) return
-
+  function handleFile(file: File) {
     if (!file.type.startsWith("image/")) {
       setError("Please select an image file")
       return
     }
-
     setError(null)
     setLoading(true)
-
     const url = URL.createObjectURL(file)
     const img = new Image()
     img.onload = () => {
@@ -36,10 +31,32 @@ export default function LocalFileInput({ onLoad }: Props) {
     img.src = url
   }
 
+  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    if (file) handleFile(file)
+  }
+
+  function handlePaste(e: ClipboardEvent) {
+    const items = e.clipboardData?.items
+    if (!items) return
+    for (const item of Array.from(items)) {
+      if (item.type.startsWith("image/")) {
+        const file = item.getAsFile()
+        if (file) handleFile(file)
+        break
+      }
+    }
+  }
+
+  useEffect(() => {
+    document.addEventListener("paste", handlePaste)
+    return () => document.removeEventListener("paste", handlePaste)
+  }, [])
+
   return (
     <div className="space-y-2">
       <label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
-        Local File
+        Local File <span className="text-zinc-400">(or paste with Ctrl+V)</span>
       </label>
       <div className="flex gap-2">
         <input
